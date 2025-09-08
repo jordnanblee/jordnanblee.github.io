@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="manifest" href="https://jordnanblee.github.io/manifest.json" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JB Games - Play Free Online Games</title>
+    <meta name="description" content="Play free online games instantly! Discover 300+ amazing games including action, puzzle, racing, sports and more. No downloads required. Best gaming experience on JB Games">
+    <meta name="keywords" content="free online games, browser games, flash games, HTML5 games, play games online, gaming portal">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://jordnanblee.github.io/">
+    
+    <!-- Favicon SVG -->
+    <link rel="shortcut icon" href="https://jordnanblee.github.io/favicon.ico">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23667eea'/%3E%3Cpath d='M30 35h40v30H30z' fill='%23764ba2'/%3E%3Ccircle cx='40' cy='50' r='8' fill='%23f093fb'/%3E%3Ccircle cx='60' cy='50' r='8' fill='%23f093fb'/%3E%3C/svg%3E">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;color:#333;line-height:1.6}
+.header{background:#fffffff2;backdrop-filter:blur(10px);border-bottom:1px solid #fff3;position:sticky;top:0;z-index:100;padding:1rem 0}
+.nav-container{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-family:'Poppins',sans-serif;font-size:2rem;font-weight:700;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.random-game-btn{background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);color:#fff;border:none;padding:.8rem 1.5rem;border-radius:50px;font-weight:600;cursor:pointer;transition:all .3s ease;text-decoration:none;display:inline-block}
+.random-game-btn:hover{transform:translateY(-2px);box-shadow:0 10px 25px #f093fb66}
+.container{max-width:1200px;margin:2rem auto;padding:0 2rem}
+.controls{background:#fffffff2;backdrop-filter:blur(10px);padding:2rem;border-radius:20px;margin-bottom:2rem;box-shadow:0 10px 40px #0000001a}
+.search-container{position:relative;margin-bottom:1.5rem}
+.search-input{width:100%;padding:1rem 3rem 1rem 1.5rem;font-size:1.1rem;border:2px solid #e1e5e9;border-radius:15px;background:#f8f9fa;transition:all .3s ease}
+.search-input:focus{outline:none;border-color:#667eea;background:#fff;box-shadow:0 0 0 3px #667eea1a}
+.search-icon{position:absolute;right:1rem;top:50%;transform:translateY(-50%);color:#667eea;font-size:1.2rem}
+.filters{display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
+.filter-btn{padding:.6rem 1.2rem;border:2px solid #e1e5e9;background:#fff;border-radius:25px;cursor:pointer;transition:all .3s ease;font-weight:500}
+.filter-btn:hover,.filter-btn.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border-color:transparent;transform:translateY(-2px)}
+.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2rem;margin-bottom:3rem}
+.game-card{background:#fffffff2;backdrop-filter:blur(10px);border-radius:20px;overflow:hidden;transition:all .3s ease;cursor:pointer;box-shadow:0 5px 20px #0000001a;position:relative}
+.game-card:hover{transform:translateY(-10px);box-shadow:0 20px 40px #00000026}
+.game-image{width:100%;height:160px;background:linear-gradient(45deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-size:3rem;color:#fff;position:relative;overflow:hidden}
+.game-image::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,#ffffff1a 0%,transparent 70%);animation:shimmer 3s ease-in-out infinite}
+@keyframes shimmer {
+0%,100%{transform:translateX(-100%) translateY(-100%) rotate(45deg)}
+50%{transform:translateX(100%) translateY(100%) rotate(45deg)}
+}
+.game-info{padding:1.5rem}
+.game-title{font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:600;margin-bottom:.5rem;color:#2d3748}
+.game-category{color:#667eea;font-size:.85rem;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.play-btn{position:absolute;top:10px;right:10px;background:#ffffffe6;border:none;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s ease;opacity:0}
+.game-card:hover .play-btn{opacity:1}
+.play-btn:hover{background:#667eea;color:#fff;transform:scale(1.1)}
+.panic-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#fff;z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;font-family:'Times New Roman',serif}
+.panic-content{text-align:center;padding:2rem}
+.panic-content h1{font-size:2.5rem;color:#333;margin-bottom:1rem}
+.panic-content p{font-size:1.2rem;color:#666;max-width:600px;line-height:1.8}
+.footer{background:#ffffff1a;backdrop-filter:blur(10px);padding:2rem 0;text-align:center;color:#fff;border-top:1px solid #fff3;position:relative}
+.footer-content{max-width:1200px;margin:0 auto;padding:0 2rem}
+.panic-btn{background:#dc3545;color:#fff;border:none;padding:.5rem 1rem;border-radius:5px;cursor:pointer;font-weight:600;margin-left:1rem;transition:all .3s ease}
+.panic-btn:hover{background:#c82333;transform:translateY(-2px)}
+@media (max-width: 768px) {
+.nav-container{flex-direction:column;gap:1rem}
+.logo{font-size:1.5rem}
+.container{padding:0 1rem}
+.controls{padding:1.5rem}
+.filters{gap:.5rem}
+.games-grid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem}
+.panic-content h1{font-size:2rem}
+}
+.loading{text-align:center;padding:3rem;color:#fff;font-size:1.2rem}
+.loading::after{content:'';display:inline-block;width:20px;height:20px;border:2px solid #ffffff4d;border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite;margin-left:10px}
+@keyframes spin {
+to{transform:rotate(360deg)}
+}
+.game-icon{font-size:2.5rem;opacity:.8}
+.exit-panic-btn{margin-top:2rem;padding:.8rem 1.5rem;background:#667eea;color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer;transition:all .3s ease}
+.exit-panic-btn:hover{background:#764ba2;transform:translateY(-2px)}
+</style>
+</head>
+<body>
+   <!-- School Panic Mode Overlay -->
+<div class="panic-overlay" id="panicOverlay">
+    <div class="panic-content">
+        <h1>Educational Mathematics Portal</h1>
+        <p>Welcome to the Advanced Mathematics Learning Platform. This educational resource provides comprehensive mathematical concepts, problem-solving techniques, and academic research materials designed to enhance your understanding of complex mathematical theories and applications in modern academic environments.</p>
+        <p style="margin-top: 2rem; font-style: italic;">Currently reviewing: Advanced Calculus and Statistical Analysis Methods</p>
+        <button class="exit-panic-btn" onclick="togglePanic()">Exit</button>
+    </div>
+</div>
+
+
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">🎮 JB Games</div>
+            <a href="#" class="random-game-btn" id="randomGameBtn">🎲 Random Game</a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Search and Filter Controls -->
+        <div class="controls">
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search for your favorite games...">
+                <span class="search-icon">🔍</span>
+            </div>
+            <div class="filters">
+                <button class="filter-btn active" data-category="all">All Games</button>
+                <button class="filter-btn" data-category="action">Action</button>
+                <button class="filter-btn" data-category="puzzle">Puzzle</button>
+                <button class="filter-btn" data-category="racing">Racing</button>
+                <button class="filter-btn" data-category="sports">Sports</button>
+                <button class="filter-btn" data-category="strategy">Strategy</button>
+                <button class="filter-btn" data-category="arcade">Arcade</button>
+                <button class="filter-btn" data-category="adventure">Adventure</button>
+            </div>
+        </div>
+
+        <!-- Games Grid -->
+        <div class="games-grid" id="gamesGrid">
+            <div class="loading">Loading amazing games...</div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Jordnan Blee Games. Play responsibly and have fun!</p>
+            <p style="margin-top: 0.5rem;">Press <strong>`</strong> for School Panic Mode when teacher approaches 
+                <button class="panic-btn" onclick="togglePanic()">Emergency Mode</button>
+            </p>
+        </div>
+    </footer>
+<script src="https://jordnanblee.github.io/main.js?v=1.2"></script>
+</body>
+</html>
