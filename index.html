@@ -79,6 +79,11 @@ to{transform:rotate(360deg)}
 </style>
 </head>
 <body>
+<script>
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/sw.js')
+.then(registration => {console.log('Service Worker registered successfully:', registration);})
+.catch(error => {console.log('Error in Service Worker registration:', error);});});}
+</script>
    <!-- School Panic Mode Overlay -->
 <div class="panic-overlay" id="panicOverlay">
     <div class="panic-content">
