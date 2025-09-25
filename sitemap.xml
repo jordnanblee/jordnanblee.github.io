@@ -63,5 +63,26 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+
+    <url>
+    <loc>https://jordnanblee.github.io/solitaire/</loc>
+    <lastmod>2025-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+    <url>
+    <loc>https://jordnanblee.github.io/minesweeper/</loc>
+    <lastmod>2025-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+    <url>
+    <loc>https://jordnanblee.github.io/doodlebaseball/</loc>
+    <lastmod>2025-09-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   
 </urlset>
