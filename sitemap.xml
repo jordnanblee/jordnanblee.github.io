@@ -35,5 +35,33 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-
+  
+  <url>
+    <loc>https://jordnanblee.github.io/dino/</loc>
+    <lastmod>2025-09-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://jordnanblee.github.io/pacman/</loc>
+    <lastmod>2025-09-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://jordnanblee.github.io/doodlecricket/</loc>
+    <lastmod>2025-09-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://jordnanblee.github.io/googlesnake/</loc>
+    <lastmod>2025-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
 </urlset>
