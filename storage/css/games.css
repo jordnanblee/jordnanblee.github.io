@@ -1,5 +1,4 @@
 @import url('https://jordnanblee.github.io/storage/css/themes.css');
-
 :root {
     --background-image: url('https://jordnanblee.github.io/seraph/images/backgrounds/seraph/gamebg.jpg');
     --border-color1: #a19b9b;
@@ -39,7 +38,6 @@
 html {
     scroll-behavior: smooth;
 }
-
 body {
     margin: 0;
     padding: 0;
