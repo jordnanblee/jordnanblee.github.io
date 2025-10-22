@@ -1,50 +1,49 @@
-const CACHE_NAME = 'cache-v2';
-const urlsToCache = [
-  '/index.html',
-  '/robots.txt',
-  '/manifest.json',
-  '/icons/icon-72x72.png',
-  '/icons/icon-96x96.png',
-  '/icons/icon-128x128.png',
-  '/icons/icon-144x144.png',
-  '/icons/icon-152x152.png',
-  '/icons/icon-192x192.png',
-  '/icons/icon-384x384.png',
-  '/icons/icon-512x512.png',
+const CACHE_NAME = 'seraph-cache';
+const OFFLINE_URLS = [
+    'https://jordnanblee.github.io/seraph/offline.html',
 ];
 
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
-      .then(() => console.log('Cache successfully initialized'))
-      .catch(error => console.log('Cache initialization failed:', error))
-  );
-});
-
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        if (response) {
-          return response;
-        }
-        return fetch(event.request);
-      })
-      .catch(error => console.log('Fetch error:', error))
-  );
-});
-
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
+self.addEventListener('install', function(event) {
+    event.waitUntil(
+        caches.open(CACHE_NAME).then(function(cache) {
+            return cache.addAll(OFFLINE_URLS).then(function() {
+                self.skipWaiting();
+                self.clients.matchAll().then(clients => {
+                    clients.forEach(client => client.postMessage('cached'));
+                });
+            });
         })
-      );
-    })
-  );
+    );
 });
+
+self.addEventListener('fetch', function(event) {
+    event.respondWith(
+        fetch(event.request).catch(function() {
+            return caches.match(event.request).then(function(response) {
+                if (response) {
+                    return response;
+                }
+                if (event.request.mode === 'navigate') {
+                    return caches.match('./offline.html');
+                }
+            });
+        })
+    );
+});
+
+self.addEventListener('activate', function(event) {
+    var cacheWhitelist = [CACHE_NAME];
+
+    event.waitUntil(
+        caches.keys().then(function(cacheNames) {
+            return Promise.all(
+                cacheNames.map(function(cacheName) {
+                    if (cacheWhitelist.indexOf(cacheName) === -1) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        })
+    );
+});
+
