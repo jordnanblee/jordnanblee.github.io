@@ -544,7 +544,7 @@ function catLabel(id) {
 // URL SEARCH SYNC (?q=)
 // Keeps the address bar in sync with the search box so links like
 // https://jordnanblee.github.io/?q=slope are shareable and pre-filter
-// the catalog on load — matches the SearchAction declared in the
+// the catalog on load - matches the SearchAction declared in the
 // page's schema.org JSON-LD.
 // 
 function readQueryFromUrl() {
@@ -578,7 +578,33 @@ function setSearchQuery(q) {
 // 
 // INIT
 // 
+// Build skeleton HTML that matches a real card's dimensions so the
+// grid reserves the right amount of space before images arrive -
+// the main driver of CLS on first paint.
+function buildSkeletons(count) {
+  return Array.from({length: count}, () =>
+    `<div class="skeleton" aria-hidden="true">
+      <div class="skel-img"></div>
+      <div class="skel-body">
+        <div class="skel-line"></div>
+        <div class="skel-line short"></div>
+      </div>
+    </div>`
+  ).join("");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  // Inject skeletons immediately so the grid has stable dimensions
+  // on first paint, eliminating layout shift when real cards arrive.
+  // Temporarily suppress aria-live so screen readers aren't announced
+  // skeleton markup, then restore it before the real render.
+  const grid = document.getElementById("gamesGrid");
+  grid.removeAttribute("aria-live");
+  grid.innerHTML = buildSkeletons(20);
+  // Restore aria-live after one frame so the real renderGames() call
+  // below can announce its results normally.
+  requestAnimationFrame(() => grid.setAttribute("aria-live", "polite"));
+
   buildFilters();
   buildMobileCats();
 
@@ -592,6 +618,8 @@ document.addEventListener("DOMContentLoaded", () => {
   renderGames();
   updateFavCount();
   document.getElementById("totalCount").textContent = GAMES.length + "+";
+  // CATS includes the "all" entry which isn't a real genre, so subtract 1.
+  document.getElementById("catCount").textContent = CATS.length - 1;
   document.getElementById("randomBtn").addEventListener("click", openRandom);
   searchInput.addEventListener("input", e => setSearchQuery(e.target.value));
   document.getElementById("searchClear").addEventListener("click", () => {
@@ -651,7 +679,7 @@ function buildMobileCats() {
     btn.addEventListener("click", () => {
       state.cat = cat.id;
       // Keep the tab bar (All / Favorites) in sync instead of just
-      // silently mutating state — this was the original bug where the
+      // silently mutating state - this was the original bug where the
       // "Favorites" tab could stay visually active after switching category.
       switchTab("all");
       document.querySelectorAll("#filterBar .filter-btn").forEach(b => {
@@ -690,7 +718,7 @@ function renderGames() {
   ri.textContent = `${list.length} game${list.length !== 1 ? "s" : ""} found`;
 
   if (!list.length) {
-    grid.innerHTML = `<div class="empty">🎮<p>${state.tab === "favorites" ? "No favourites yet — click ❤️ on any game to save it." : "No games match your search."}</p></div>`;
+    grid.innerHTML = `<div class="empty">🎮<p>${state.tab === "favorites" ? "No favourites yet - click ❤️ on any game to save it." : "No games match your search."}</p></div>`;
     return;
   }
 
@@ -700,11 +728,17 @@ function renderGames() {
     grid.className = "games-grid";
   }
 
-  grid.innerHTML = list.map(g => buildCard(g)).join("");
+  grid.innerHTML = list.map((g, i) => buildCard(g, i)).join("");
   grid.querySelectorAll(".game-card").forEach((card, i) => {
     const g = list[i];
     card.addEventListener("click", e => {
       if (!e.target.closest(".card-btn")) window.open(g.u, "_blank", "noopener");
+    });
+    card.addEventListener("keydown", e => {
+      if ((e.key === "Enter" || e.key === " ") && !e.target.closest(".card-btn")) {
+        e.preventDefault();
+        window.open(g.u, "_blank", "noopener");
+      }
     });
     card.querySelector(".fav-btn").addEventListener("click", e => {
       e.stopPropagation();
@@ -722,12 +756,18 @@ function renderGames() {
   });
 }
 
-function buildCard(g) {
+function buildCard(g, index) {
   const isFav = state.favs.includes(g.n);
   const thumbUrl = g.t ? THUMB_BASE + g.t : "";
+  // Provide explicit width/height so the browser can reserve space before
+  // the image loads - this eliminates CLS on the card grid.
+  // The displayed height is 148px at desktop and 110px at mobile (<768px);
+  // we use the larger value and let CSS constrain it via object-fit:cover.
+  // The first 8 cards are likely above the fold, so load them eagerly.
+  const loadAttr = index < 8 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
   const thumbHtml = thumbUrl
-    ? `<img class="game-thumb" src="${thumbUrl}" alt="${escapeHtml(g.n)}" loading="lazy">`
-    : `<div class="game-thumb-placeholder">${g.i}</div>`;
+    ? `<img class="game-thumb" src="${thumbUrl}" alt="${escapeHtml(g.n)}" width="230" height="148" ${loadAttr}>`
+    : `<div class="game-thumb-placeholder" aria-hidden="true">${g.i}</div>`;
   return `<div class="game-card" role="listitem" tabindex="0" aria-label="Play ${escapeHtml(g.n)}">
     ${thumbHtml}
     <div class="game-body">
