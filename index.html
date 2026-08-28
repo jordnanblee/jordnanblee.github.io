@@ -76,7 +76,7 @@
 
 <style>
 *,::before,::after{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0d0d1a;--bg2:#13131f;--bg3:#1a1a2e;--card:#16213e;--card-hover:#1e2a4a;--border:#2a2a45;--accent:#00d4ff;--accent2:#7c3aed;--accent3:#f59e0b;--text:#e8e8f0;--text2:#cfcffd;--text3:#a7a7fc;--white:#fff;--red:#ef4444;--green:#22c55e;--radius:12px;--radius-lg:18px;--shadow:0 4px 24px #00000080;--shadow-lg:0 8px 48px #00d4ff1f;--font:Georgia,'Times New Roman',Times,serif;--font-ui:system-ui,-apple-system,'Segoe UI',Arial,sans-serif;--transition:all .2s ease}
+:root{--bg:#0d0d1a;--bg2:#13131f;--bg3:#1a1a2e;--card:#16213e;--card-hover:#1e2a4a;--border:#2a2a45;--accent:#00d4ff;--accent2:#7c3aed;--accent3:#f59e0b;--text:#e8e8f0;--text2:#cfcffd;--text3:#a7a7fc;--white:#fff;--red:#b30a0a;--green:#22c55e;--radius:12px;--radius-lg:18px;--shadow:0 4px 24px #00000080;--shadow-lg:0 8px 48px #00d4ff1f;--font:Georgia,'Times New Roman',Times,serif;--font-ui:system-ui,-apple-system,'Segoe UI',Arial,sans-serif;--transition:all .2s ease}
 html{scroll-behavior:smooth}
 body{font-family:var(--font-ui);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
@@ -126,32 +126,33 @@ img{max-width:100%;display:block}
 .stat strong{display:block;font-size:1.5rem;color:var(--accent);font-family:var(--font)}
 .stat span{font-size:.8rem;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
 .container{max-width:1300px;margin:0 auto;padding:0 1.5rem}
-.controls{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1.5rem}
-.controls-top{display:flex;gap:.75rem;margin-bottom:1rem;align-items:center}
-.search-wrap{position:relative;flex:1}
+.tab-bar{display:flex;gap:.5rem;margin-bottom:1rem;min-height:32px;align-items:center}
+.controls{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1.5rem;min-height:140px;contain:layout style}
+.controls-top{display:flex;gap:.75rem;margin-bottom:1rem;align-items:center;min-height:44px}
+.search-wrap{position:relative;flex:1;min-width:0}
 .search-icon{position:absolute;left:.9rem;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none;font-size:1rem}
-.search-input{width:100%;padding:.75rem 2.5rem;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:.9rem;transition:var(--transition)}
+.search-input{width:100%;padding:.75rem 2.5rem;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:.9rem;transition:border-color .2s ease,box-shadow .2s ease;height:44px;line-height:1.4}
 .search-input::placeholder{color:var(--text3)}
 .search-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px #00d4ff1a}
 .search-input::-webkit-search-cancel-button{display:none}
 .search-clear{position:absolute;right:.6rem;top:50%;transform:translateY(-50%);color:var(--text3);font-size:1rem;line-height:1;padding:.3rem;border-radius:50%;transition:var(--transition)}
 .search-clear:hover{color:var(--text);background:var(--card-hover)}
-.view-toggle{display:flex;gap:.25rem;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:3px}
-.view-btn{padding:.45rem .7rem;border-radius:8px;color:var(--text3);font-size:1rem;transition:var(--transition)}
+.view-toggle{display:flex;gap:.25rem;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:3px;flex-shrink:0;height:44px;align-items:center}
+.view-btn{padding:.45rem .7rem;border-radius:8px;color:var(--text3);font-size:1rem;transition:var(--transition);width:36px;height:36px;display:flex;align-items:center;justify-content:center}
 .view-btn.active{background:var(--accent2);color:#fff}
-.filter-scroll{display:flex;gap:.5rem;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.filter-scroll{display:flex;gap:.5rem;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;min-height:34px;align-items:center}
 .filter-scroll::-webkit-scrollbar{display:none}
-.filter-btn{padding:.45rem 1rem;border:1px solid var(--border);background:var(--bg3);border-radius:50px;color:var(--text2);font-size:.82rem;font-weight:500;white-space:nowrap;transition:var(--transition);flex-shrink:0}
+.filter-btn{padding:.45rem 1rem;border:1px solid var(--border);background:var(--bg3);border-radius:50px;color:var(--text2);font-size:.82rem;font-weight:500;white-space:nowrap;transition:var(--transition);flex-shrink:0;height:32px;display:inline-flex;align-items:center;line-height:1}
 .filter-btn:hover{border-color:var(--accent);color:var(--accent)}
 .filter-btn.active{background:var(--accent2);border-color:var(--accent2);color:#fff}
-.results-info{font-size:.82rem;color:var(--text3);padding:.25rem 0 .5rem;display:flex;justify-content:space-between;align-items:center}
-.fav-count{background:var(--accent3);color:#1a0000;font-size:.72rem;font-weight:700;padding:.15rem .45rem;border-radius:50px;margin-left:.35rem}
+.results-info{font-size:.82rem;color:var(--text3);padding:.25rem 0 .5rem;display:flex;justify-content:space-between;align-items:center;min-height:calc(.82rem * 1.6 + .5rem)}
+.fav-count{background:var(--accent3);color:#1a0000;font-size:.72rem;font-weight:700;padding:.15rem .45rem;border-radius:50px;margin-left:.35rem;display:inline-flex;align-items:center;line-height:1;min-width:1.4em;justify-content:center}
 .games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.25rem;margin-bottom:2rem}
 .games-grid.list-view{grid-template-columns:1fr}
-.game-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;position:relative;cursor:pointer}
-.game-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);border-color:var(--accent)}
-.game-thumb{width:100%;height:148px;object-fit:cover;display:block;background:var(--bg3)}
-.game-thumb-placeholder{width:100%;height:148px;background:linear-gradient(135deg,var(--bg3) 0%,var(--card-hover) 100%);display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.game-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;position:relative;cursor:pointer;contain:layout style}
+.game-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);border-color:var(--accent);will-change:transform}
+.game-thumb{width:100%;height:148px;object-fit:cover;display:block;background:var(--bg3);aspect-ratio:230/148}
+.game-thumb-placeholder{width:100%;height:148px;aspect-ratio:230/148;background:linear-gradient(135deg,var(--bg3) 0%,var(--card-hover) 100%);display:flex;align-items:center;justify-content:center;font-size:2.5rem}
 .game-body{padding:.9rem}
 .game-title{font-size:.92rem;font-weight:600;color:var(--text);margin-bottom:.3rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:capitalize}
 .game-cat{font-size:.75rem;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;font-weight:500}
@@ -181,8 +182,8 @@ img{max-width:100%;display:block}
 .section-lead{color:var(--text2);font-size:.95rem;max-width:780px;margin-bottom:2rem;line-height:1.7}
 .divider{height:1px;background:var(--border);margin:3rem 0}
 .features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.25rem}
-.feature-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem}
-.feature-icon{font-size:1.8rem;margin-bottom:.75rem}
+.feature-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;contain:layout style}
+.feature-icon{font-size:1.8rem;line-height:1;margin-bottom:.75rem}
 .feature-card h3{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:.4rem}
 .feature-card p{font-size:.82rem;color:var(--text2);line-height:1.6}
 .howto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem}
@@ -233,10 +234,11 @@ img{max-width:100%;display:block}
 .hero{padding:2rem 1rem 1.5rem}
 .hero-stats{gap:1.25rem}
 .games-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem}
-.game-thumb,.game-thumb-placeholder{height:110px}
+.game-thumb,.game-thumb-placeholder{height:110px;aspect-ratio:160/110}
 .card-actions{opacity:1}
 .footer-cols{grid-template-columns:1fr}
 .btn-panic{display:none}
+.controls{min-height:134px}
 }
 @media(max-width:480px) {
 .games-grid{grid-template-columns:repeat(2,1fr)}
@@ -323,7 +325,7 @@ if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigat
   <div class="hero-stats">
     <div class="stat"><strong id="totalCount">500+</strong><span>Free Games</span></div>
     <div class="stat"><strong>0</strong><span>Downloads</span></div>
-    <div class="stat"><strong>9</strong><span>Categories</span></div>
+    <div class="stat"><strong id="catCount">9</strong><span>Categories</span></div>
     <div class="stat"><strong>100%</strong><span>Free Forever</span></div>
   </div>
 </section>
@@ -331,8 +333,9 @@ if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigat
 <!--  MAIN CONTENT  -->
 <main class="container" id="games">
 
-  <!-- Tab bar -->
-  <div style="display:flex;gap:.5rem;margin-bottom:1rem">
+  <!-- Tab bar: height pre-reserved in CSS (.tab-bar) to avoid CLS when
+       JS updates the fav-count badge or switches the active tab. -->
+  <div class="tab-bar">
     <button class="filter-btn active" id="tabAll" onclick="switchTab('all')">🎮 All Games</button>
     <button class="filter-btn" id="tabFav" onclick="switchTab('favorites')">❤️ Favorites <span class="fav-count" id="favCount">0</span></button>
   </div>
@@ -505,7 +508,7 @@ if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigat
     </div>
     <div class="footer-bottom">
       <div>
-        <div class="footer-copy">© <span id="current-year"></span> JB Games · <a href="https://jordnanblee.github.io/" style="color:var(--accent)" target="_blank" rel="noopener">jordnanblee.github.io</a> · Play responsibly and have fun!</div>
+        <div class="footer-copy">© <span id="current-year"></span> JB Games · <span style="color:var(--accent)">jordnanblee.github.io</span> · Play responsibly and have fun!</div>
         <div class="disclaimer">Disclaimer: JB Games aggregates publicly available browser-based games for entertainment purposes. All game content, trademarks, and intellectual property rights belong to their respective owners. JB Games does not claim ownership of any hosted third-party game. This site is not affiliated with any game developer or publisher unless explicitly stated.</div>
       </div>
       <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center">
@@ -515,7 +518,6 @@ if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigat
     </div>
   </div>
 </footer>
-
-<script src="https://jordnanblee.github.io/main.js?v=1.3"></script>
+<script src="https://jordnanblee.github.io/main.js?v=1.31"></script>
 </body>
 </html>
